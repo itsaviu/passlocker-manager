@@ -1,0 +1,22 @@
+server:
+  port: 8082
+  servlet:
+    context-path: /manager
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${MANAGER_DB_URL:jdbc:postgresql://localhost:5432/passlocker_manager_dev}
+    username: ${MANGER_DB_USERNAME:postgres}
+    password: ${MANAGER_DB_PASSWORD}
+  flyway:
+    enabled: true
+    validate-on-migrate: true
+  jpa:
+    show-sql: true
+auth:
+  url: http://localhost:5555/
+
+jwt:
+  secret:
+
