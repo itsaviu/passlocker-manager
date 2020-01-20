@@ -1,7 +1,8 @@
 package com.ua.passlocker.manager.models.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.ua.passlocker.manager.views.Views;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -26,24 +27,27 @@ public class Groups implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.FolderView.class)
     private Long id;
 
+    @JsonView(Views.FolderView.class)
     private String name;
 
     @ManyToOne
     @NotFound(action = NotFoundAction.IGNORE)
     @JoinColumn(name = "parentId")
-    @JsonIgnore
     private Groups parentId;
 
     @ManyToOne
     @JoinColumn(name = "userDetailId", referencedColumnName = "id")
     private UserDetails userDetails;
 
+    @JsonView(Views.FolderView.class)
     private Timestamp createdAt;
 
     @JsonSerialize(include = JsonSerialize.Inclusion.NON_EMPTY)
     @OneToMany(mappedBy = "parentId", fetch = FetchType.EAGER)
+    @JsonView(Views.FolderView.class)
     private Set<Groups> childGroup = new HashSet<>();
 
     public Groups(String name, Groups parentId, UserDetails userDetails) {
