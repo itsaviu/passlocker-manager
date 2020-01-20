@@ -1,4 +1,8 @@
 package com.ua.passlocker.manager.views;
 
-public class Views {
+public interface Views {
+
+    class FolderView {}
+
+    class VaultView {}
 }

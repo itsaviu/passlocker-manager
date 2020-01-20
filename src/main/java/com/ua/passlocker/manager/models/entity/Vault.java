@@ -14,12 +14,12 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "passmanager")
+@Table(name = "vault")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
-public class Passmanager {
+public class Vault {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,8 +31,8 @@ public class Passmanager {
     private UserDetails userDetailId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "groupId")
-    private Folders groupId;
+    @JoinColumn(name = "folderId")
+    private Folders folderId;
 
     @JsonView(Views.VaultView.class)
     private String name;
@@ -55,9 +55,11 @@ public class Passmanager {
     @JsonView(Views.VaultView.class)
     private Timestamp createdAt;
 
-    public Passmanager(UserDetails userDetailId, Folders folders, String name, String login, String credentials, String url, PassType passType, String notes) {
+    private Timestamp updatedAt;
+
+    public Vault(UserDetails userDetailId, Folders folders, String name, String login, String credentials, String url, PassType passType, String notes) {
         this.userDetailId = userDetailId;
-        this.groupId = folders;
+        this.folderId = folders;
         this.name = name;
         this.login = login;
         this.credentials = credentials;
@@ -65,5 +67,18 @@ public class Passmanager {
         this.passType = passType;
         this.notes = notes;
         this.createdAt = Timestamp.valueOf(LocalDateTime.now());
+        this.updatedAt = Timestamp.valueOf(LocalDateTime.now());
     }
+
+    public Vault with(Folders folders, String name, String login, String credentials, String url, String notes) {
+        this.folderId = folders;
+        this.name = name;
+        this.login = login;
+        this.credentials = credentials;
+        this.url = url;
+        this.notes = notes;
+        this.updatedAt = Timestamp.valueOf(LocalDateTime.now());
+        return this;
+    }
+
 }

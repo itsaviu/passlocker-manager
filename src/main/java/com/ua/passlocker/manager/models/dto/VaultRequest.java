@@ -9,9 +9,11 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class PassManagerReq {
+public class VaultRequest {
 
-    private Long groupId;
+    private Long id;
+
+    private Long folderId;
 
     private String name;
 
@@ -22,4 +24,6 @@ public class PassManagerReq {
     private String url;
 
     private String notes;
+
+
 }

@@ -9,7 +9,9 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class GroupReq {
+public class FolderReq {
+
+    private Long id;
 
     private String name;
 

@@ -1,10 +1,11 @@
 package com.ua.passlocker.manager.service;
 
 
-import com.ua.passlocker.manager.models.dto.GroupReq;
-import com.ua.passlocker.manager.models.entity.Groups;
+import com.ua.passlocker.manager.exceptions.GeneralNotExistException;
+import com.ua.passlocker.manager.models.dto.FolderReq;
+import com.ua.passlocker.manager.models.entity.Folders;
 import com.ua.passlocker.manager.models.entity.UserDetails;
-import com.ua.passlocker.manager.repo.GroupRepository;
+import com.ua.passlocker.manager.repo.FolderRepository;
 import com.ua.passlocker.manager.security.SecurityContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,28 +15,35 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class GroupService {
+public class FolderService {
 
 
     @Autowired
-    private GroupRepository groupRepo;
+    private FolderRepository folderRepo;
 
-    public void createGroup(GroupReq groupReq) {
+    public void createFolder(FolderReq folderReq) {
         UserDetails userDetails = SecurityContextHolder.getContextHolder().getUserDetails();
-        if (ObjectUtils.isEmpty(groupReq.getParentId())) {
-            groupRepo.save(new Groups(groupReq.getName(), null, userDetails));
+        if (ObjectUtils.isEmpty(folderReq.getParentId())) {
+            folderRepo.save(new Folders(folderReq.getName(), null, userDetails));
         } else {
-            Groups group = groupRepo.findById(groupReq.getParentId()).orElseThrow(() -> new RuntimeException("Invalid Group Id"));
-            groupRepo.save(new Groups(groupReq.getName(), group, userDetails));
+            Folders folders = folderRepo.findById(folderReq.getParentId()).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
+            folderRepo.save(new Folders(folderReq.getName(), folders, userDetails));
 
         }
     }
 
-    public List<Groups> getAllGroupForUser() {
+    public List<Folders> getAllFoldersForUser() {
         UserDetails userDetails = SecurityContextHolder.getContextHolder().getUserDetails();
-        List<Groups> groups = groupRepo.findAllByUserDetailsSelfJoin(userDetails);
-        return groups.stream()
-                .filter(group -> ObjectUtils.isEmpty(group.getParentId()))
+        List<Folders> folders = folderRepo.findAllByUserDetails(userDetails);
+        return folders.stream()
+                .filter(folder -> ObjectUtils.isEmpty(folder.getParentId()))
                 .collect(Collectors.toList());
+    }
+
+    public void updateFolder(FolderReq folderReq) {
+        UserDetails userDetails = SecurityContextHolder.getContextHolder().getUserDetails();
+        Folders folders = folderRepo.findByIdAndUserDetails(folderReq.getId(), userDetails).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
+        Folders parentFolder = folderRepo.findByIdAndUserDetails(folderReq.getParentId(), userDetails).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
+        folderRepo.save(folders.with(parentFolder));
     }
 }

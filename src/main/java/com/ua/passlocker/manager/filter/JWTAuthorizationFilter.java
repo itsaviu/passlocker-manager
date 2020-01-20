@@ -75,7 +75,7 @@ public class JWTAuthorizationFilter implements Filter {
                     UserDetails userDetails = userDetailService.loadUserByEmailId(sub.asString()).orElseThrow(() -> new UserNotExistException("User not exist"));
                     SecurityContextHolder.setContextHolder(new ContextHolder(userDetails));
                     chain.doFilter(request, response);
-                } catch (JWTVerificationException exception) {
+                } catch (JWTVerificationException | UserNotExistException exception) {
                     log.error("Exception authentication", exception);
                     httpServletResp.sendError(HttpStatus.UNAUTHORIZED.value(), "User Un-Authorized");
                 } catch (Exception ex) {

@@ -35,7 +35,7 @@ public class UserDetails implements Serializable {
 
     @OneToMany(mappedBy = "userDetailId")
     @JsonIgnore
-    private List<Passmanager> passmanagers;
+    private List<Vault> vaults;
 
     public UserDetails(Long userId, String username, String emailId) {
         this.userId = userId;

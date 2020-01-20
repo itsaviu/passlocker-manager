@@ -1,30 +1,37 @@
 package com.ua.passlocker.manager.controller;
 
 import com.fasterxml.jackson.annotation.JsonView;
-import com.ua.passlocker.manager.models.dto.GroupReq;
-import com.ua.passlocker.manager.service.GroupService;
+import com.ua.passlocker.manager.models.dto.FolderReq;
+import com.ua.passlocker.manager.service.FolderService;
 import com.ua.passlocker.manager.views.Views;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/group")
-public class GroupController {
+@RequestMapping("/folders")
+public class FolderController {
 
     @Autowired
-    private GroupService groupService;
+    private FolderService folderService;
 
     @PostMapping("/create")
-    public ResponseEntity createGroup(@RequestBody GroupReq groupReq) {
-        groupService.createGroup(groupReq);
+    public ResponseEntity createFolder(@RequestBody FolderReq folderReq) {
+        folderService.createFolder(folderReq);
         return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/details")
-    @JsonView(Views.GroupView.class)
-    public ResponseEntity getGroups() {
-        return ResponseEntity.ok(groupService.getAllGroupForUser());
+    @PostMapping("/update")
+    public ResponseEntity updateFolder(@RequestBody FolderReq folderReq) {
+        folderService.updateFolder(folderReq);
+        return ResponseEntity.ok().build();
+    }
+
+
+    @GetMapping("/lists")
+    @JsonView(Views.FolderView.class)
+    public ResponseEntity getFolders() {
+        return ResponseEntity.ok(folderService.getAllFoldersForUser());
     }
 
 }

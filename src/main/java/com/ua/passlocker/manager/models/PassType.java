@@ -1,4 +1,5 @@
 package com.ua.passlocker.manager.models;
 
-public class PassType {
+public enum PassType {
+    DEFAULT;
 }
