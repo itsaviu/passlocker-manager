@@ -6,7 +6,7 @@ import com.ua.passlocker.manager.models.dto.FolderReq;
 import com.ua.passlocker.manager.models.entity.Folders;
 import com.ua.passlocker.manager.models.entity.UserDetails;
 import com.ua.passlocker.manager.repo.FolderRepository;
-import com.ua.passlocker.manager.security.SecurityContextHolder;
+import com.ua.passlocker.manager.security.LocalContextHolder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
@@ -22,7 +22,7 @@ public class FolderService {
     private FolderRepository folderRepo;
 
     public void createFolder(FolderReq folderReq) {
-        UserDetails userDetails = SecurityContextHolder.getContextHolder().getUserDetails();
+        UserDetails userDetails = LocalContextHolder.getContextHolder().getUserDetails();
         if (ObjectUtils.isEmpty(folderReq.getParentId())) {
             folderRepo.save(new Folders(folderReq.getName(), null, userDetails));
         } else {
@@ -33,7 +33,7 @@ public class FolderService {
     }
 
     public List<Folders> getAllFoldersForUser() {
-        UserDetails userDetails = SecurityContextHolder.getContextHolder().getUserDetails();
+        UserDetails userDetails = LocalContextHolder.getContextHolder().getUserDetails();
         List<Folders> folders = folderRepo.findAllByUserDetails(userDetails);
         return folders.stream()
                 .filter(folder -> ObjectUtils.isEmpty(folder.getParentId()))
@@ -41,7 +41,7 @@ public class FolderService {
     }
 
     public void updateFolder(FolderReq folderReq) {
-        UserDetails userDetails = SecurityContextHolder.getContextHolder().getUserDetails();
+        UserDetails userDetails = LocalContextHolder.getContextHolder().getUserDetails();
         Folders folders = folderRepo.findByIdAndUserDetails(folderReq.getId(), userDetails).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
         Folders parentFolder = folderRepo.findByIdAndUserDetails(folderReq.getParentId(), userDetails).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
         folderRepo.save(folders.with(parentFolder));

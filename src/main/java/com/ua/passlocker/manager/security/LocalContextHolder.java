@@ -2,7 +2,7 @@ package com.ua.passlocker.manager.security;
 
 import com.ua.passlocker.manager.models.ContextHolder;
 
-public class SecurityContextHolder {
+public class LocalContextHolder {
 
     private static ThreadLocal<ContextHolder> threadLocal = new ThreadLocal<>();
 

@@ -14,6 +14,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -49,6 +50,9 @@ public class Folders implements Serializable {
     @OneToMany(mappedBy = "parentId", fetch = FetchType.EAGER)
     @JsonView(Views.FolderView.class)
     private Set<Folders> subFolders = new HashSet<>();
+
+    @OneToMany(mappedBy = "folderId", fetch = FetchType.EAGER)
+    private List<Vault> vaultList;
 
     public Folders(String name, Folders parentId, UserDetails userDetails) {
         this.name = name;

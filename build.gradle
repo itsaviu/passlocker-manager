@@ -1,5 +1,18 @@
+import com.amazonaws.auth.profile.ProfileCredentialsProvider
+
+buildscript {
+    repositories {
+        mavenLocal()
+        jcenter()
+    }
+    dependencies {
+        classpath "org.springframework.boot:spring-boot-gradle-plugin:2.2.4.RELEASE"
+        classpath 'com.amazonaws:aws-java-sdk-core:1.11.5'
+    }
+}
+
 plugins {
-    id 'org.springframework.boot' version '2.2.3.RELEASE'
+    id 'org.springframework.boot' version '2.2.4.RELEASE'
     id 'io.spring.dependency-management' version '1.0.8.RELEASE'
     id 'java'
 }
@@ -22,7 +35,25 @@ ext {
     set('springCloudVersion', "Hoxton.SR1")
 }
 
+
+ext {
+    awsCredentials = new ProfileCredentialsProvider().credentials
+}
+
+repositories {
+    maven {
+        url "s3://passlocker-artifactory/releases"
+        credentials(AwsCredentials) {
+            accessKey awsCredentials.AWSAccessKeyId
+            secretKey awsCredentials.AWSSecretKey
+        }
+    }
+    mavenLocal()
+    jcenter()
+}
+
 dependencies {
+    implementation 'com.ua.passlocker:authorizer:1.1.1'
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
     implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation 'org.springframework.boot:spring-boot-starter-web'
