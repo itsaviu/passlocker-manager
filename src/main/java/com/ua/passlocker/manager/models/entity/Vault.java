@@ -23,7 +23,7 @@ public class Vault {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.VaultView.class)
+    @JsonView({Views.VaultView.class, Views.VaultDetailView.class})
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -34,16 +34,16 @@ public class Vault {
     @JoinColumn(name = "folderId")
     private Folders folderId;
 
-    @JsonView(Views.VaultView.class)
+    @JsonView({Views.VaultView.class, Views.VaultDetailView.class})
     private String name;
 
-    @JsonView(Views.VaultView.class)
+    @JsonView({Views.VaultView.class, Views.VaultDetailView.class})
     private String login;
 
     @JsonView(Views.VaultView.class)
     private String credentials;
 
-    @JsonView(Views.VaultView.class)
+    @JsonView({Views.VaultView.class, Views.VaultDetailView.class})
     private String url;
 
     @Enumerated(value = EnumType.STRING)

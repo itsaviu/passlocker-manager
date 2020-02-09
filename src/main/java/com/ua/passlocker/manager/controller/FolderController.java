@@ -34,4 +34,10 @@ public class FolderController {
         return ResponseEntity.ok(folderService.getAllFoldersForUser());
     }
 
+    @GetMapping("/{id}")
+    @JsonView(Views.VaultDetailView.class)
+    public ResponseEntity getFolderDetail(@PathVariable Long id) {
+        return ResponseEntity.ok(folderService.fetchFolderById(id));
+    }
+
 }

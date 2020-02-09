@@ -27,10 +27,10 @@ public class Folders implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JsonView(Views.FolderView.class)
+    @JsonView({ Views.FolderView.class, Views.VaultDetailView.class})
     private Long id;
 
-    @JsonView(Views.FolderView.class)
+    @JsonView({ Views.FolderView.class, Views.VaultDetailView.class})
     private String name;
 
     @ManyToOne
@@ -42,16 +42,17 @@ public class Folders implements Serializable {
     @JoinColumn(name = "userDetailId", referencedColumnName = "id")
     private UserDetails userDetails;
 
-    @JsonView(Views.FolderView.class)
+    @JsonView({ Views.FolderView.class, Views.VaultDetailView.class})
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
 
     @OneToMany(mappedBy = "parentId", fetch = FetchType.EAGER)
-    @JsonView(Views.FolderView.class)
+    @JsonView({ Views.FolderView.class, Views.VaultDetailView.class})
     private Set<Folders> subFolders = new HashSet<>();
 
     @OneToMany(mappedBy = "folderId", fetch = FetchType.EAGER)
+    @JsonView({Views.VaultDetailView.class})
     private List<Vault> vaultList;
 
     public Folders(String name, Folders parentId, UserDetails userDetails) {

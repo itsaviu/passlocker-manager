@@ -40,6 +40,11 @@ public class FolderService {
                 .collect(Collectors.toList());
     }
 
+    public Folders fetchFolderById(Long id) {
+        UserDetails userDetails = LocalContextHolder.getContextHolder().getUserDetails();
+        return folderRepo.findByIdAndUserDetails(id, userDetails).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
+    }
+
     public void updateFolder(FolderReq folderReq) {
         UserDetails userDetails = LocalContextHolder.getContextHolder().getUserDetails();
         Folders folders = folderRepo.findByIdAndUserDetails(folderReq.getId(), userDetails).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));

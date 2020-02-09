@@ -5,4 +5,6 @@ public interface Views {
     class FolderView {}
 
     class VaultView {}
+
+    class VaultDetailView {}
 }
