@@ -40,7 +40,7 @@ public class Vault {
     @JsonView({Views.VaultView.class, Views.VaultDetailView.class})
     private String login;
 
-    @JsonView(Views.VaultView.class)
+    @JsonView({Views.VaultView.class,  Views.VaultDetailView.class})
     private String credentials;
 
     @JsonView({Views.VaultView.class, Views.VaultDetailView.class})
@@ -49,10 +49,10 @@ public class Vault {
     @Enumerated(value = EnumType.STRING)
     private PassType passType;
 
-    @JsonView(Views.VaultView.class)
+    @JsonView({Views.VaultView.class,  Views.VaultDetailView.class})
     private String notes;
 
-    @JsonView(Views.VaultView.class)
+    @JsonView({Views.VaultView.class,  Views.VaultDetailView.class})
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
