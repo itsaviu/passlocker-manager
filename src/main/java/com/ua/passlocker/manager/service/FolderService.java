@@ -21,13 +21,13 @@ public class FolderService {
     @Autowired
     private FolderRepository folderRepo;
 
-    public void createFolder(FolderReq folderReq) {
+    public Long createFolder(FolderReq folderReq) {
         UserDetails userDetails = LocalContextHolder.getContextHolder().getUserDetails();
         if (ObjectUtils.isEmpty(folderReq.getParentId())) {
-            folderRepo.save(new Folders(folderReq.getName(), null, userDetails));
+            return folderRepo.save(new Folders(folderReq.getName(), null, userDetails)).getId();
         } else {
             Folders folders = folderRepo.findById(folderReq.getParentId()).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
-            folderRepo.save(new Folders(folderReq.getName(), folders, userDetails));
+            return folderRepo.save(new Folders(folderReq.getName(), folders, userDetails)).getId();
 
         }
     }

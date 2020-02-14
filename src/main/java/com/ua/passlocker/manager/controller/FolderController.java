@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+
 @RestController
 @RequestMapping("/folders")
 public class FolderController {
@@ -17,8 +19,9 @@ public class FolderController {
 
     @PostMapping("/create")
     public ResponseEntity createFolder(@RequestBody FolderReq folderReq) {
-        folderService.createFolder(folderReq);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(new HashMap<String, Long>() {{
+            put("id", folderService.createFolder(folderReq));
+        }});
     }
 
     @PostMapping("/update")
