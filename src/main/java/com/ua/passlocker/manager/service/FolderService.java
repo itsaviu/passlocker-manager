@@ -2,6 +2,8 @@ package com.ua.passlocker.manager.service;
 
 
 import com.ua.passlocker.manager.exceptions.GeneralNotExistException;
+import com.ua.passlocker.manager.models.FolderBreadCrumbs;
+import com.ua.passlocker.manager.models.dto.FolderDetailResp;
 import com.ua.passlocker.manager.models.dto.FolderReq;
 import com.ua.passlocker.manager.models.entity.Folders;
 import com.ua.passlocker.manager.models.entity.UserDetails;
@@ -11,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -40,9 +45,20 @@ public class FolderService {
                 .collect(Collectors.toList());
     }
 
-    public Folders fetchFolderById(Long id) {
+    public FolderDetailResp fetchFolderById(Long id) {
         UserDetails userDetails = LocalContextHolder.getContextHolder().getUserDetails();
-        return folderRepo.findByIdAndUserDetails(id, userDetails).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
+        Folders folder = folderRepo.findByIdAndUserDetails(id, userDetails).orElseThrow(() -> new GeneralNotExistException("Invalid Folder Id"));
+        List<FolderBreadCrumbs> breadCrumbs = new LinkedList<>();
+        this.addBreadCrumbForFolder(folder, breadCrumbs);
+        Collections.reverse(breadCrumbs);
+        return new FolderDetailResp(breadCrumbs, folder);
+    }
+
+    private void addBreadCrumbForFolder(Folders folders, List<FolderBreadCrumbs> breadCrumbs) {
+        breadCrumbs.add(new FolderBreadCrumbs(folders.getId(), folders.getName()));
+        if(!ObjectUtils.isEmpty(folders.getParentId())) {
+            addBreadCrumbForFolder(folders.getParentId(), breadCrumbs);
+        }
     }
 
     public void updateFolder(FolderReq folderReq) {
